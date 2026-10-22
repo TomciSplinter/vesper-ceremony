@@ -1,0 +1,6 @@
+{
+  "url": "https://pse-trusted-setup-ppot.s3.eu-central-1.amazonaws.com/pot28_0080/ppot_0080_15.ptau",
+  "blake2b": "a6dd3adcf80f6716c4d082be2626e790af1f5ed3d760814dc439a07d91e93421382c91d4f705abe8cd90ef1956e4b7eaf58db29d81be5abe624dab4dae827f24",
+  "verifiedWith": "snarkjs 0.7.6 powersoftau verify",
+  "date": "2026-10-22T03:15:29.479Z"
+}
