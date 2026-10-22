@@ -12,7 +12,7 @@ you don't have to trust anyone else, including the Vesper team.
 
 | Part | What | Who |
 |---|---|---|
-| Phase 1 | The public [Perpetual Powers of Tau](https://github.com/privacy-ethereum/perpetualpowersoftau) (Ethereum Foundation / PSE), response 0080: 80 contributors, 2^15 file. Fully checked with `snarkjs powersoftau verify` when the ceremony starts, then pinned by hash in `phase1/ptau.json` (log in `phase1/verify-log.txt`). | Already done, reused |
+| Phase 1 | The public [Perpetual Powers of Tau](https://github.com/privacy-ethereum/perpetualpowersoftau) (Ethereum Foundation / PSE), response 0080, 2^15 file (it records 62 contributions, every one checked). Fully checked with `snarkjs powersoftau verify` when the ceremony starts, then pinned by hash in `phase1/ptau.json` (log in `phase1/verify-log.txt`). | Already done, reused |
 | Phase 2 | Contributions specific to Vesper's circuit, one after another, in `contributions/0001.zkey`, `0002.zkey`, ... | **You** |
 | Seal | A public random beacon nobody could predict, announced in advance | Coordinator |
 
