@@ -73,7 +73,7 @@ export async function ensurePtau({ pin = false } = {}) {
     return PTAU.file;
   }
   if (!pin) throw new Error("phase-1 file isn't pinned yet: run the Start ceremony Action first");
-  console.log("Verifying every contribution in the phase-1 file (several minutes) ...");
+  console.log("Verifying every contribution in the phase-1 file (1-3 hours: snarkjs rehashes the full 2^28 starting point) ...");
   const log = [];
   const logger = { info: (m) => log.push(String(m)), warn: (m) => log.push("WARN " + m), error: (m) => log.push("ERROR " + m), debug() {} };
   const ok = await snarkjs.powersOfTau.verify(PTAU.file, logger);
