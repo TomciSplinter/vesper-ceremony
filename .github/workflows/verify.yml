@@ -18,7 +18,7 @@ jobs:
         with: { node-version: 22 }
       - run: npm ci
       - uses: actions/cache@v4
-        with: { path: ptau, key: hermez-ptau-15 }
+        with: { path: ptau, key: ppot-0080-15 }
       - run: node scripts/verify.mjs --pr origin/${{ github.base_ref }}
 
   full:
@@ -37,7 +37,7 @@ jobs:
           chmod +x /usr/local/bin/circom
       - run: bash scripts/check-circuit.sh
       - uses: actions/cache@v4
-        with: { path: ptau, key: hermez-ptau-15 }
+        with: { path: ptau, key: ppot-0080-15 }
       - run: node scripts/verify.mjs --all
       - if: hashFiles('final/transaction2_final.zkey') != ''
         run: node scripts/verify-final.mjs

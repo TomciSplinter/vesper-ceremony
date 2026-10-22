@@ -1,6 +1,6 @@
 name: Start ceremony
 # Run once by the coordinator (Actions tab -> Start ceremony -> Run workflow). Builds
-# contributions/0000.zkey from the circuit and the public Hermez phase-1 file, in public,
+# contributions/0000.zkey from the circuit and the public Perpetual Powers of Tau phase-1 file, in public,
 # so the log shows exactly how the starting key was made.
 on: workflow_dispatch
 permissions:
@@ -8,7 +8,7 @@ permissions:
 jobs:
   init:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,6 +18,6 @@ jobs:
       - run: |
           git config user.name "vesper-ceremony-bot"
           git config user.email "actions@github.com"
-          git add contributions/0000.zkey
-          git commit -m "Start ceremony: 0000.zkey from Hermez phase 1"
+          git add contributions/0000.zkey phase1/
+          git commit -m "Start ceremony: verify + pin phase 1, build 0000.zkey"
           git push

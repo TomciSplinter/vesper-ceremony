@@ -7,7 +7,7 @@ import { CONTRIB_DIR, R1CS, ensurePtau, fileHash, listZkeys } from "./lib.mjs";
 
 const out = path.join(CONTRIB_DIR, "0000.zkey");
 if (listZkeys().length) throw new Error("ceremony already started (contributions/ isn't empty)");
-const ptau = await ensurePtau();
+const ptau = await ensurePtau({ pin: true });
 console.log("Building the starting key (no randomness yet) ...");
 await snarkjs.zKey.newZKey(R1CS, ptau, out, console);
 console.log(`\nWrote ${out}\nsha256 ${fileHash(out, "sha256")}`);

@@ -12,7 +12,7 @@ you don't have to trust anyone else, including the Vesper team.
 
 | Part | What | Who |
 |---|---|---|
-| Phase 1 | The public [Hermez / Polygon powers of tau](https://github.com/iden3/snarkjs#7-prepare-phase-2) (54 contributors), 2^15 file. Its blake2b hash is checked against the one published by snarkjs. | Already done, reused |
+| Phase 1 | The public [Perpetual Powers of Tau](https://github.com/privacy-ethereum/perpetualpowersoftau) (Ethereum Foundation / PSE), response 0080: 80 contributors, 2^15 file. Fully checked with `snarkjs powersoftau verify` when the ceremony starts, then pinned by hash in `phase1/ptau.json` (log in `phase1/verify-log.txt`). | Already done, reused |
 | Phase 2 | Contributions specific to Vesper's circuit, one after another, in `contributions/0001.zkey`, `0002.zkey`, ... | **You** |
 | Seal | A public random beacon nobody could predict, announced in advance | Coordinator |
 
