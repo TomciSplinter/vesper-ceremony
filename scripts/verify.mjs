@@ -9,6 +9,7 @@ import { CONTRIB_DIR, ROOT, ensurePtau, listZkeys, nameFor, numberOf, short, ver
 const args = process.argv.slice(2);
 const fail = (msg) => {
   console.error(`\n✘ ${msg}`);
+  if (process.env.CI) console.log(`::error::${msg}`);
   process.exit(1);
 };
 if (process.env.CI && process.env.DEV_PTAU) fail("DEV_PTAU is not allowed in CI");
@@ -35,7 +36,10 @@ function print(contribs) {
 }
 
 const keys = listZkeys();
-if (!keys.length) fail("no keys in contributions/");
+if (!keys.length) {
+  if (args[0] === "--all") { console.log("Ceremony not started yet (no keys)."); process.exit(0); }
+  fail("no keys in contributions/");
+}
 keys.forEach((k, i) => numberOf(k) !== i && fail(`files must be numbered 0000, 0001, ... without gaps (found ${k})`));
 
 if (args[0] === "--pr") {

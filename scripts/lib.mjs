@@ -5,6 +5,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as snarkjs from "snarkjs";
 
+// In GitHub Actions, show failures as annotations.
+if (process.env.CI) {
+  process.on("uncaughtException", (e) => { console.log(`::error::${e?.message || e}`); console.error(e); process.exit(1); });
+  process.on("unhandledRejection", (e) => { console.log(`::error::${e?.message || e}`); console.error(e); process.exit(1); });
+}
+
 export const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const R1CS = path.join(ROOT, "circuit", "transaction2.r1cs");
 export const CONTRIB_DIR = path.join(ROOT, "contributions");
