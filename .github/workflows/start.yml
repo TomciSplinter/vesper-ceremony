@@ -1,0 +1,23 @@
+name: Start ceremony
+# Run once by the coordinator (Actions tab -> Start ceremony -> Run workflow). Builds
+# contributions/0000.zkey from the circuit and the public Hermez phase-1 file, in public,
+# so the log shows exactly how the starting key was made.
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      - run: node scripts/init.mjs
+      - run: |
+          git config user.name "vesper-ceremony-bot"
+          git config user.email "actions@github.com"
+          git add contributions/0000.zkey
+          git commit -m "Start ceremony: 0000.zkey from Hermez phase 1"
+          git push
