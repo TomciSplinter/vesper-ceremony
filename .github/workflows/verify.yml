@@ -19,6 +19,9 @@ jobs:
       - run: npm ci
       - uses: actions/cache@v4
         with: { path: ptau, key: ppot-0080-15 }
+      - name: Download phase 1
+        run: |
+          [ -f ptau/ppot_0080_15.ptau ] || { mkdir -p ptau && curl -fSL --retry 3 --connect-timeout 30 --max-time 900 -o ptau/ppot_0080_15.ptau https://pse-trusted-setup-ppot.s3.eu-central-1.amazonaws.com/pot28_0080/ppot_0080_15.ptau; }
       - run: node scripts/verify.mjs --pr origin/${{ github.base_ref }}
 
   full:
@@ -38,6 +41,9 @@ jobs:
       - run: bash scripts/check-circuit.sh
       - uses: actions/cache@v4
         with: { path: ptau, key: ppot-0080-15 }
+      - name: Download phase 1
+        run: |
+          [ -f ptau/ppot_0080_15.ptau ] || { mkdir -p ptau && curl -fSL --retry 3 --connect-timeout 30 --max-time 900 -o ptau/ppot_0080_15.ptau https://pse-trusted-setup-ppot.s3.eu-central-1.amazonaws.com/pot28_0080/ppot_0080_15.ptau; }
       - run: node scripts/verify.mjs --all
       - if: hashFiles('final/transaction2_final.zkey') != ''
         run: node scripts/verify-final.mjs

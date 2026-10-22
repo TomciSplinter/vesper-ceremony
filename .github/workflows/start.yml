@@ -14,7 +14,15 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm ci
+      - name: Download phase 1
+        run: |
+          mkdir -p ptau
+          curl -fSL --retry 3 --connect-timeout 30 --max-time 900 -o ptau/ppot_0080_15.ptau \
+            https://pse-trusted-setup-ppot.s3.eu-central-1.amazonaws.com/pot28_0080/ppot_0080_15.ptau
+          ls -l ptau
+          echo "::notice::downloaded $(stat -c %s ptau/ppot_0080_15.ptau) bytes, blake2b $(b2sum ptau/ppot_0080_15.ptau | cut -c1-32)"
       - run: node scripts/init.mjs
+        timeout-minutes: 30
       - run: |
           git config user.name "vesper-ceremony-bot"
           git config user.email "actions@github.com"
