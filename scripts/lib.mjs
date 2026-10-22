@@ -20,7 +20,12 @@ export const FINAL_DIR = path.join(ROOT, "final");
 // Phase 1: the public Hermez / Polygon powers of tau (54 contributors + beacon),
 // 2^15 points. Hash published in the snarkjs README.
 export const PTAU = {
-  url: "https://storage.googleapis.com/zkevm/ptau/powersOfTau28_hez_final_15.ptau",
+  // Any copy is fine: the hash below is checked byte for byte.
+  urls: [
+    "https://storage.googleapis.com/zkevm/ptau/powersOfTau28_hez_final_15.ptau",
+    "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_15.ptau",
+    "https://hermez.s3.eu-west-1.amazonaws.com/powersOfTau28_hez_final_15.ptau",
+  ],
   file: path.join(ROOT, "ptau", "powersOfTau28_hez_final_15.ptau"),
   blake2b:
     "982372c867d229c236091f767e703253249a9b432c1710b4f326306bfa2428a1" +
@@ -51,10 +56,16 @@ export async function ensurePtau() {
   if (process.env.DEV_PTAU) return ptauPath();
   if (!fs.existsSync(PTAU.file)) {
     fs.mkdirSync(path.dirname(PTAU.file), { recursive: true });
-    console.log(`Downloading phase-1 file (36 MB) from ${PTAU.url}`);
-    const res = await fetch(PTAU.url);
-    if (!res.ok) throw new Error(`download failed: HTTP ${res.status}`);
-    fs.writeFileSync(PTAU.file + ".part", Buffer.from(await res.arrayBuffer()));
+    const tried = [];
+    let data = null;
+    for (const url of PTAU.urls) {
+      console.log(`Downloading phase-1 file (36 MB) from ${url}`);
+      const res = await fetch(url).catch((e) => ({ ok: false, status: e.message }));
+      if (res.ok) { data = Buffer.from(await res.arrayBuffer()); break; }
+      tried.push(`${url} -> ${res.status}`);
+    }
+    if (!data) throw new Error(`phase-1 download failed: ${tried.join("; ")}`);
+    fs.writeFileSync(PTAU.file + ".part", data);
     fs.renameSync(PTAU.file + ".part", PTAU.file);
   }
   const got = fileHash(PTAU.file, "blake2b512");
