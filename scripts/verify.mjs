@@ -13,7 +13,6 @@ const fail = (msg) => {
   process.exit(1);
 };
 if (process.env.CI && process.env.DEV_PTAU) fail("DEV_PTAU is not allowed in CI");
-const ptau = await ensurePtau();
 
 async function check(file) {
   process.stdout.write(`Verifying ${path.basename(file)} (about a minute) ... `);
@@ -40,6 +39,7 @@ if (!keys.length) {
   if (args[0] === "--all") { console.log("Ceremony not started yet (no keys)."); process.exit(0); }
   fail("no keys in contributions/");
 }
+const ptau = await ensurePtau();
 keys.forEach((k, i) => numberOf(k) !== i && fail(`files must be numbered 0000, 0001, ... without gaps (found ${k})`));
 
 if (args[0] === "--pr") {
