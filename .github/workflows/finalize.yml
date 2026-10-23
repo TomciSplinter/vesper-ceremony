@@ -1,0 +1,39 @@
+name: Finalize ceremony
+# Coordinator, once: seals the ceremony with the drand round announced in final/BEACON.md.
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      - uses: actions/cache@v4
+        with: { path: ptau, key: ppot-0080-15 }
+      - name: Download phase 1
+        run: |
+          [ -f ptau/ppot_0080_15.ptau ] || { mkdir -p ptau && curl -fSL --retry 3 --connect-timeout 30 --max-time 900 -o ptau/ppot_0080_15.ptau https://pse-trusted-setup-ppot.s3.eu-central-1.amazonaws.com/pot28_0080/ppot_0080_15.ptau; }
+      - name: Fetch the announced drand beacon
+        id: beacon
+        run: |
+          CHAIN=52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971
+          ROUND=$(grep -oP 'round \K[0-9]+' final/BEACON.md | head -1)
+          a=$(curl -fsS https://api.drand.sh/$CHAIN/public/$ROUND | jq -r .randomness)
+          b=$(curl -fsS https://drand.cloudflare.com/$CHAIN/public/$ROUND | jq -r .randomness)
+          echo "round $ROUND: $a / $b"
+          [ -n "$a" ] && [ "$a" != null ] && [ "$a" = "$b" ] || { echo "::error::beacon not available or endpoints disagree"; exit 1; }
+          echo "::notice::drand quicknet round $ROUND randomness $a"
+          echo "hex=$a" >> "$GITHUB_OUTPUT"
+          echo "source=drand quicknet round $ROUND" >> "$GITHUB_OUTPUT"
+      - run: node scripts/finalize.mjs "${{ steps.beacon.outputs.hex }}" "${{ steps.beacon.outputs.source }}"
+      - run: node scripts/verify-final.mjs
+      - run: |
+          git config user.name "vesper-ceremony-bot"
+          git config user.email "actions@github.com"
+          git add final/
+          git commit -m "Finalize ceremony with ${{ steps.beacon.outputs.source }}"
+          git push
