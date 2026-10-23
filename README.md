@@ -36,8 +36,9 @@ You need [Node.js](https://nodejs.org) 18 or newer and git.
    Type some random keys when asked. It takes about a minute and prints your **contribution
    hash**.
 3. **Send it in.** On this repo's page click **Fork → Create fork** (your own copy). On your
-   copy, click **Add file → Upload files**, drag in the two folders **contributions** and
-   **attestations** from your folder, and click **Commit changes**. Then click **Contribute →
+   copy, open the **contributions** folder, click **Add file → Upload files**, drag in **only your
+   new `NNNN.zkey`** (not the whole folder: too big for one browser upload), and click **Commit
+   changes**. Do the same for your `NNNN.md` in the **attestations** folder (optional). Then click **Contribute →
    Open pull request → Create pull request**. The check runs by itself (the coordinator may need
    to approve it the first time).
 4. **Post your hash publicly** (X, Farcaster, a blog...). That is your public proof that your
